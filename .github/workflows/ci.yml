@@ -18,11 +18,9 @@ on:
       - '.idea/**'
       - '.vscode/**'
 
-env:
-  DIST_CHANNEL: alpha-release
 
 concurrency:
-  group: ${{github.workflow}}-${{ github.ref }}-alpha-release
+  group: ${{github.workflow}}-${{ github.ref }}-${{vars.DIST_CHANNEL}}
   cancel-in-progress: true
 
 permissions:
@@ -64,7 +62,7 @@ jobs:
     with:
       renderer-template: vanilla-ts
       app-version: ${{ needs.prepare.outputs.APP_FULL_VERSION }}
-      distribution-channel: ${{env.DIST_CHANNEL}}
+      distribution-channel: ${{vars.DIST_CHANNEL}}
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -75,5 +73,5 @@ jobs:
       - compile-and-test
     uses: ./.github/workflows/deploy.yml
     with:
-      distribution-channel: ${{ env.DIST_CHANNEL }}
+      distribution-channel: ${{ vars.DIST_CHANNEL }}
       app-version: ${{ needs.prepare.outputs.APP_FULL_VERSION }}
