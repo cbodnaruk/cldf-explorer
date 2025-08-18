@@ -1,9 +1,19 @@
+import { Table } from '@app/main/src/modules/CLDFSpec.js';
 import {sha256sum} from './nodeCrypto.js';
 import {versions} from './versions.js';
 import {ipcRenderer} from 'electron';
+import { TablewData } from '../../../types/CLDFSpec.js';
 
 function send(channel: string, message: string) {
   return ipcRenderer.invoke(channel, message);
+}
+
+export function getTableList():Promise<string[]>{
+  return send('getTableList','')
+}
+
+export function getTable(name:string):Promise<TablewData>{
+  return send('getTable',name)
 }
 
 export {sha256sum, versions, send};

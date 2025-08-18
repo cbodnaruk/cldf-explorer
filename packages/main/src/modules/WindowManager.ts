@@ -1,7 +1,10 @@
 import type {AppModule} from '../AppModule.js';
 import {ModuleContext} from '../ModuleContext.js';
-import {BrowserWindow} from 'electron';
+import {BrowserWindow, Menu} from 'electron';
 import type {AppInitConfig} from '../AppInitConfig.js';
+import { AppMenu } from './AppMenu.js';
+
+var browser: BrowserWindow
 
 class WindowManager implements AppModule {
   readonly #preload: {path: string};
@@ -32,12 +35,13 @@ class WindowManager implements AppModule {
         preload: this.#preload.path,
       },
     });
-
+    browser = browserWindow
     if (this.#renderer instanceof URL) {
       await browserWindow.loadURL(this.#renderer.href);
     } else {
       await browserWindow.loadFile(this.#renderer.path);
     }
+    Menu.setApplicationMenu(AppMenu)
 
     return browserWindow;
   }
@@ -72,4 +76,11 @@ class WindowManager implements AppModule {
 
 export function createWindowManagerModule(...args: ConstructorParameters<typeof WindowManager>) {
   return new WindowManager(...args);
+}
+type ipcSendParams = {
+  message: any
+  channel: string
+}
+export function ipcSend(params:ipcSendParams): void{
+  browser.webContents.send(params.channel,params.message)
 }

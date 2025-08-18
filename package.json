@@ -5,7 +5,6 @@
   "private": true,
   "type": "module",
   "author": {
-    "email": "kozackunisoft@gmail.com",
     "name": "Alex Kozack",
     "url": "https://kozack.me"
   },
@@ -37,6 +36,8 @@
     "playwright": "^1.54.2"
   },
   "dependencies": {
-    "@app/main": "*"
+    "@app/main": "*",
+    "csv": "^6.4.1",
+    "tabulator-tables": "^6.3.1"
   }
 }
