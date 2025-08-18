@@ -1,0 +1,21 @@
+{
+  "name": "@app/renderer",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build --base ./",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^7.1.2"
+  },
+  "main": "./dist/index.html",
+  "exports": {
+    ".": {
+      "default": "./dist/index.html"
+    }
+  }
+}
