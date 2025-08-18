@@ -22,7 +22,7 @@ env:
   DIST_CHANNEL: alpha-release
 
 concurrency:
-  group: ${{github.workflow}}-${{ github.ref }}-${{env.DIST_CHANNEL}}
+  group: ${{github.workflow}}-${{ github.ref }}-alpha-release
   cancel-in-progress: true
 
 permissions:
