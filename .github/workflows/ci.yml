@@ -18,6 +18,8 @@ on:
       - '.idea/**'
       - '.vscode/**'
 
+env:
+  DIST_CHANNEL: alpha-release
 
 concurrency:
   group: ${{github.workflow}}-${{ github.ref }}-${{env.DIST_CHANNEL}}
@@ -28,8 +30,7 @@ permissions:
   id-token: write
   attestations: write
 
-env:
-  DIST_CHANNEL: alpha-release
+
 
 jobs:
   prepare:
