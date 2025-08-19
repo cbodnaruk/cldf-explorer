@@ -1,5 +1,5 @@
 import { getTable, sendOpenRecentFile, showFileOpen } from "@app/preload"
-import { TabulatorFull as Tabulator } from 'tabulator-tables';
+import { TabulatorFull as Tabulator, type ColumnDefinition, type ColumnLookup } from 'tabulator-tables';
 import type { ForeignKey, TablewData } from "../../../types/CLDFSpec"
 import { contextMenu } from "./components";
 
@@ -16,6 +16,8 @@ interface showTableOptions {
     initialFilter?: filter
 }
 
+
+
 export async function showTable(tableName: string, opts: showTableOptions): Promise<void> {
     
     const tableWrapper = document.querySelector('#table')
@@ -27,7 +29,8 @@ export async function showTable(tableName: string, opts: showTableOptions): Prom
 
         const columns = []
         for (let col of fullTable.metadata.tableSchema.columns) {
-            columns.push({ title: col.name, field: col.name, headerFilter: 'input' })
+            let colDef: ColumnDefinition = {title: col.name, field: col.name, headerFilter: 'input' }
+            columns.push(colDef)
         }
 
         grid = new Tabulator('#table', {
@@ -52,8 +55,8 @@ export async function showTable(tableName: string, opts: showTableOptions): Prom
                         for (let line in fullTable.data) {
                             if (fullTable.data[line].Name == opts.selectedKey) {
                                 try {
-                                    let pageSize = grid.getPageSize()
-                                    let page = Math.ceil(line / pageSize)
+                                    let pageSize = grid.getPageSize() as number
+                                    let page: number = Math.ceil(parseInt(line) / pageSize)
                                     grid.setPage(page)
                                 } catch (error) {
                                     console.log(error)
@@ -84,13 +87,13 @@ export async function showTable(tableName: string, opts: showTableOptions): Prom
 }
 
 
-function linkForeignKeys(foreignKeys) {
+function linkForeignKeys(foreignKeys?: ForeignKey[]) {
     if (foreignKeys) {
         for (let key of foreignKeys) {
             let instances = document.querySelector('.tabulator-table')?.querySelectorAll(`[tabulator-field="${key.columnReference[0]}"`) ?? document.querySelectorAll(`[tabulator-field="${key.columnReference[0]}"`)
             for (let cell of instances) {
                 cell.classList.add('foreignKey')
-                cell.addEventListener('click', (e) => {
+                cell.addEventListener('click', () => {
                     showTable(key.reference.resource.split('.')[0], { selectedKey: cell.textContent })
                 })
             }
@@ -122,14 +125,14 @@ document.addEventListener('contextmenu', (e) => {
 
 })
 
-function hideMenu(e: Event) {
+function hideMenu() {
     document.querySelector('.contextMenu')?.remove()
     document.removeEventListener('click', hideMenu)
 }
 
 export function filterByValue(e: Event) {
-    let target = e.target as HTMLElement
-    let field = target.coreTarget.getAttribute('tabulator-field')
+    let target = e.target as HTMLElement & {coreTarget: HTMLElement}
+    let field: ColumnLookup = target.coreTarget.getAttribute('tabulator-field') ?? ''
     let value = target.coreTarget.textContent
 
     console.log(field, value);
@@ -147,8 +150,8 @@ export function testMenu(e: Event) {
 }
 
 export function openReference(e: Event) {
-    let target = e.target as HTMLElement
-    target.coreTarget.click()
+    let target = e.target as HTMLElement & {coreTarget?: HTMLElement}
+    target.coreTarget?.click()
 
 }
 
@@ -159,12 +162,12 @@ interface filter {
 }
 
 export async function openChildReference(e: Event) {
-    let target = e.target as HTMLElement
+    let target = e.target as HTMLElement & {coreTarget?: HTMLElement}
     let reference = target.getAttribute('itemReference')
     if (reference) {
         let tableReference = reference.split(":")[0]
         let fieldReference = reference.split(":")[1]
-        await showTable(tableReference, { initialFilter: { field: fieldReference, value: target.coreTarget.textContent } })
+        await showTable(tableReference, { initialFilter: { field: fieldReference, value: target.coreTarget?.textContent ?? '' } })
     }
 }
 
