@@ -1,8 +1,9 @@
 import type {AppModule} from '../AppModule.js';
 import {ModuleContext} from '../ModuleContext.js';
-import {BrowserWindow, Menu} from 'electron';
+import {BrowserWindow, ipcMain, Menu, MenuItem} from 'electron';
 import type {AppInitConfig} from '../AppInitConfig.js';
 import { AppMenu } from './AppMenu.js';
+import { openFile } from './FileHandler.js';
 
 var browser: BrowserWindow
 
@@ -84,3 +85,5 @@ type ipcSendParams = {
 export function ipcSend(params:ipcSendParams): void{
   browser.webContents.send(params.channel,params.message)
 }
+
+ipcMain.handle('showFileOpen',openFile)

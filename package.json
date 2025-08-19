@@ -1,12 +1,13 @@
 {
-  "name": "root",
-  "description": "Secure boilerplate for Electron app based on Vite",
-  "version": "3.1.0",
+  "name": "cldf-explorer",
+  "description": "App to view and explore CLDF datasets",
+  "version": "0.1.0",
   "private": true,
-  "type": "module",
+  "license": "GPL-3.0-only",
   "author": {
-    "name": "Alex Kozack",
-    "url": "https://kozack.me"
+    "name": "Carl Bodnaruk",
+    "url": "https://cbodnaruk.com",
+    "email":"carl.bodnaruk@sydney.edu.au"
   },
   "main": "packages/entry-point.mjs",
   "workspaces": [
@@ -29,6 +30,7 @@
     "@npmcli/map-workspaces": "4.0.2",
     "@playwright/test": "1.54.2",
     "@types/node": "24.3.0",
+    "@types/tabulator-tables": "^6.2.10",
     "create-vite": "7.1.1",
     "electron": "37.3.0",
     "electron-builder": "26.0.12",
@@ -38,6 +40,7 @@
   "dependencies": {
     "@app/main": "*",
     "csv": "^6.4.1",
+    "electron-store": "^10.1.0",
     "tabulator-tables": "^6.3.1"
   }
 }
