@@ -94,7 +94,7 @@ function linkForeignKeys(foreignKeys?: ForeignKey[]) {
             for (let cell of instances) {
                 cell.classList.add('foreignKey')
                 cell.addEventListener('click', () => {
-                    showTable(key.reference.resource.split('.')[0], { selectedKey: cell.textContent })
+                    showTable(key.reference.resource.split('.')[0]??'', { selectedKey: cell.textContent ?? undefined })
                 })
             }
         }
@@ -133,7 +133,7 @@ function hideMenu() {
 export function filterByValue(e: Event) {
     let target = e.target as HTMLElement & {coreTarget: HTMLElement}
     let field: ColumnLookup = target.coreTarget.getAttribute('tabulator-field') ?? ''
-    let value = target.coreTarget.textContent
+    let value = target.coreTarget.textContent ??''
 
     console.log(field, value);
 
