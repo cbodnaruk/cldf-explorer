@@ -70,7 +70,7 @@ export function contextMenu(e:Event):HTMLDivElement{
 
     if (document.getElementById("table")?.getAttribute('referencedfks') && location != 'other'){
         let references = document.getElementById("table")?.getAttribute('referencedFKs')?.split(',')
-        for (let reference of references){
+        if (references) for (let reference of references){
             if (reference != '') items.push({
                 text: `See references in table: ${reference.split(':')[0]}`,
                 does: openChildReference,
@@ -86,7 +86,7 @@ export function contextMenu(e:Event):HTMLDivElement{
 
 
     for (let item of items){
-        const listItem = document.createElement('li')
+        const listItem : HTMLElement & {coreTarget?: HTMLElement} = document.createElement('li') 
         listItem.textContent = item.text
         listItem.addEventListener('click', item.does as EventListenerOrEventListenerObject)
         listItem.coreTarget = target

@@ -3,7 +3,7 @@
   "description": "App to view and explore CLDF datasets",
   "version": "0.1.0",
   "private": true,
-  "license":"GPL-3.0-only",
+  "license": "GPL-3.0-only",
   "author": {
     "name": "Carl Bodnaruk",
     "url": "https://cbodnaruk.com"
@@ -29,6 +29,7 @@
     "@npmcli/map-workspaces": "4.0.2",
     "@playwright/test": "1.54.2",
     "@types/node": "24.3.0",
+    "@types/tabulator-tables": "^6.2.10",
     "create-vite": "7.1.1",
     "electron": "37.3.0",
     "electron-builder": "26.0.12",
