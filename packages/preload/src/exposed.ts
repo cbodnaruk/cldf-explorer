@@ -1,3 +1,4 @@
+import { on } from 'node:events';
 import * as exports from './index.js';
 import {contextBridge, ipcRenderer} from 'electron';
 
@@ -10,7 +11,8 @@ for (const exportsKey in exports) {
 }
 
 contextBridge.exposeInMainWorld('electronAPI',{
-  onDatasetLoad: (callback) => ipcRenderer.on('loaded-message',(_event, value)=> callback(value))
+  onDatasetLoad: (callback: (value: any) => void) => ipcRenderer.on('loaded-message',(_event, value)=> callback(value)),
+  onFileClose: (callback: (value: any) => void) => ipcRenderer.on('close-message',(_event, value)=> callback(value)),
 })
 
 // Re-export for tests

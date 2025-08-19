@@ -24,6 +24,7 @@ export interface CLDFMetadata {
 export interface TablewData {
     metadata:Table
     data:Datum[]
+    referencedFKs?: FKReference[]
 }
 
 export interface Datum {
@@ -33,6 +34,7 @@ export interface Datum {
 export interface TableMap {
     [key: string]: TablewData
 }
+
 
 
 export interface Dialect {
@@ -108,4 +110,13 @@ export interface ForeignKey {
 export interface Reference {
     resource: string
     columnReference: string[]
+}
+
+export interface FKLookupList {
+    [key: string]: FKReference[]
+}
+
+export interface FKReference {
+    foreignKey: ForeignKey
+    ownerName: string
 }
