@@ -6,7 +6,8 @@
   "license": "GPL-3.0-only",
   "author": {
     "name": "Carl Bodnaruk",
-    "url": "https://cbodnaruk.com"
+    "url": "https://cbodnaruk.com",
+    "email":"carl.bodnaruk@sydney.edu.au"
   },
   "main": "packages/entry-point.mjs",
   "workspaces": [
