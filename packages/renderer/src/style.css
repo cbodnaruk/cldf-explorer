@@ -1,5 +1,5 @@
 :root{
-  --primary-light: #F8F1FF;
+  --primary-light: #f5f7fa;  
   --primary-dark: #031926;
   --primary-accent: #468189;
   --primary-accent-darker: #3e7279;
@@ -10,15 +10,17 @@
 
 body{
   font-family: sans-serif;
-  text-transform: capitalize;
+  
   background-color: var(--primary-light);
   display: flex;
-  color: var(--primary-light)
+  color: var(--primary-light);
+  max-width: 100vw;
 }
 
 main{
   height: 95vh;
   flex-grow: 1;
+  max-width: 83vw;
 }
 
 #table {
@@ -27,7 +29,8 @@ main{
 }
 
 #tableList{
-  width: 250px;
+  text-transform: capitalize;
+  width: 15vw;
   min-width: 200px;
   border-right: 1px var(--primary-light) solid;
   height: 95vh;
@@ -40,8 +43,8 @@ main{
   padding: 10px;
   margin: 5px;
   cursor: pointer;
-  color: var(--primary-dark);
-  background-color: white;
+  color: var(--primary-light);
+  background-color: var(--primary-accent);
   transition: background-color 0.2s ease-in-out;
   user-select: none;
 }
@@ -69,3 +72,127 @@ main{
 .foreignKey:active{
   border-color: var(--primary-accent-darkest);
 }
+
+.welcomeScreen{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+  width: 100vw;
+  color: var(--primary-dark);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.welcomeScreen h1{
+  font-size: 4em;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.welcomeScreen h3{
+  font-size: 1.5em;
+  font-weight: 300;
+}
+
+.welcomeScreen button{
+  padding: 1em;
+  font-size: 1em;
+  border-radius: 5px;
+  background-color: var(--primary-accent);
+  border: none;
+  color: var(--primary-light);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.welcomeScreen button:hover{
+  background-color: var(--primary-accent-darker);
+}
+.welcomeScreen button:active{
+  background-color: var(--primary-accent-darkest);
+  transition: background-color 0s ease-in-out;
+}
+
+.contextMenu{
+  position:absolute;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  background-color: var(--primary-light);
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 100;
+  color: var(--primary-dark)
+}
+
+.contextMenu h3{
+  font-weight: 300;
+  margin-block: 0;
+  padding: 5px;
+  border-bottom: var(--primary-accent) solid 1px;
+}
+
+.contextMenu ul{
+  padding-inline-start: 0px;
+  margin-block: 0px;
+}
+
+.contextMenu li{
+  list-style: none;
+  padding: 5px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 5px;
+}
+
+.contextMenu li:hover{
+  background-color:hsl(from var(--primary-light) h s 90%);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.contextMenu li:active{
+  background-color:hsl(from var(--primary-light) h s 80%);
+  transition: background-color 0s ease-in-out;
+
+}
+
+.recentBox{
+  text-align: center;
+}
+
+.recentBox h3{
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1em;
+}
+
+.recentBox li{
+  list-style: none;
+  padding: 5px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 5px;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.8em;
+}
+
+.recentBox li:hover{
+  background-color:hsl(from var(--primary-light) h s 90%);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.recentBox li:active{
+    background-color:hsl(from var(--primary-light) h s 80%);
+  transition: background-color 0s ease-in-out;
+}
+
+.recentBox ul{
+  padding-inline-start: 0px;
+  margin-block: 0px;
+  border: 1px black solid;
+}
+
+

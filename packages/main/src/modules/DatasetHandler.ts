@@ -1,5 +1,5 @@
 import * as fs from "fs/promises"
-import { CLDFMetadata, TablewData as TablewData, Table, TableMap, ForeignKey, Datum } from "../../../../types/CLDFSpec.js"
+import { CLDFMetadata, TablewData as TablewData, Table, TableMap, ForeignKey, Datum, FKLookupList, FKReference } from "../../../../types/CLDFSpec.js"
 import * as csv from 'csv/sync'
 import { Data, ipcMain } from "electron"
 import { ipcSend } from "./WindowManager.js"
@@ -15,16 +15,32 @@ export function initDatasetHandler(metadata:CLDFMetadata){
 export class DatasetHandler {
     metadata: CLDFMetadata
     tables: TableMap = {}
+    foreignKeyLookupList: FKLookupList = {}
     constructor(metadata:CLDFMetadata){
         this.metadata = metadata
         for (let table of metadata.tables){
+                        if (table.tableSchema.foreignKeys){
+                for (let key of table.tableSchema.foreignKeys){
+                    let tableName = key.reference.resource.split('.')[0]
+                    if (!this.foreignKeyLookupList[tableName]){
+                        let newList: FKReference[] = []
+                        newList.push({foreignKey:key,ownerName:table.url.split('.')[0]})
+                        this.foreignKeyLookupList[tableName] = newList;
+                    } else {
+                        this.foreignKeyLookupList[key.reference.resource.split('.')[0]].push({foreignKey:key,ownerName:table.url.split('.')[0]})
+                    }
+                }
+            }
+        }
+        for (let table of metadata.tables){
+
             fs.readFile(`${process.env.DIR_PATH}/${table.url}`).then(tableData=>{
                 const parsedData:Object[] = csv.parse(tableData, {
                     columns: true,
                     delimiter:getDelimiter(table,metadata)
                 })
                 let tableName: string = table.url.split('.')[0]
-                let dataTable: TablewData = {metadata:table,data:parsedData}
+                let dataTable: TablewData = {metadata:table,data:parsedData,referencedFKs:this.foreignKeyLookupList[tableName]}
                 this.tables[tableName] = dataTable
                 if (Object.keys(this.tables).length == metadata.tables.length){
                     this.completeLoading()
@@ -43,6 +59,7 @@ export class DatasetHandler {
         }
         return tableList
     }
+    
     getTable(table:string):TablewData{
         let foreignKeys: ForeignKey[] = this.tables[table].metadata.tableSchema.foreignKeys ?? []
         let clone = structuredClone(this.tables[table])
@@ -53,10 +70,12 @@ export class DatasetHandler {
                 let column = key.columnReference[0]
                 let hashMap: Datum = {}
                 for (let reference of referenceTable.data){
-                    hashMap[reference[referenceColumn]] = reference.Name
+                    hashMap[reference[referenceColumn]] = reference.Name ?? reference.Value
                 }
                 for (let line of clone.data){
+                    line[column+"_ref"] = line[column]
                     line[column] = hashMap[line[column]]
+                    
                 }
             }
         }

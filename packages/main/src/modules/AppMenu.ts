@@ -1,5 +1,5 @@
 import { app, Menu, MenuItemConstructorOptions } from 'electron';
-import { openFile } from './FileHandler.js';
+import { closeFile, openFile } from './FileHandler.js';
 
 
 
@@ -12,6 +12,9 @@ const MenuTemplate: MenuItemConstructorOptions[] = [
         {
             label: 'Open Dataset',
             click: openFile
+        },
+        {label: "Close Dataset",
+          click: closeFile
         },
       { role: 'quit' }
     ]
@@ -38,10 +41,6 @@ const MenuTemplate: MenuItemConstructorOptions[] = [
       { role: 'reload' },
       { role: 'forceReload' },
       { role: 'toggleDevTools' },
-      { type: 'separator' },
-      { role: 'resetZoom' },
-      { role: 'zoomIn' },
-      { role: 'zoomOut' },
       { type: 'separator' },
       { role: 'togglefullscreen' }
     ]
