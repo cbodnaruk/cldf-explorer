@@ -20,9 +20,9 @@ const test = base.extend<TestFixtures>({
     /**
      * Executable path depends on root package name!
      */
-    let executablePattern = 'dist/*/root{,.*}';
+    let executablePattern = 'dist/*/cldf-explorer{,.*}';
     if (platform === 'darwin') {
-      executablePattern += '/Contents/*/root';
+      executablePattern += '/Contents/*/cldf-explorer';
     }
 
     const [executablePath] = globSync(executablePattern);
