@@ -11,7 +11,7 @@ export default /** @type import('electron-builder').Configuration */
   },
   generateUpdatesFilesForAllChannels: true,
   linux: {
-    target: ['deb','pacman'],
+    target: ['deb','pacman', 'rpm'],
   },
   productName: "CLDF Explorer",
   /**
