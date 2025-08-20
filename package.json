@@ -32,7 +32,7 @@
     "@types/node": "24.3.0",
     "@types/tabulator-tables": "^6.2.10",
     "create-vite": "7.1.1",
-    "electron": "37.3.0",
+    "electron": "37.3.1",
     "electron-builder": "26.0.12",
     "glob": "11.0.3",
     "playwright": "^1.54.2"
