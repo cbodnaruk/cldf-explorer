@@ -40,7 +40,7 @@ export class DatasetHandler {
                     delimiter:getDelimiter(table,metadata)
                 })
                 let tableName: string = table.url.split('.')[0]
-                let dataTable: TablewData = {metadata:table,data:parsedData,referencedFKs:this.foreignKeyLookupList[tableName]}
+                let dataTable: TablewData = {metadata:table,data:parsedData,referencedFKs:this.foreignKeyLookupList[tableName],primaryKey:table.tableSchema.primaryKey[0]}
                 this.tables[tableName] = dataTable
                 if (Object.keys(this.tables).length == metadata.tables.length){
                     this.completeLoading()

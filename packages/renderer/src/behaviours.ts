@@ -1,13 +1,15 @@
 import { getTable, sendOpenRecentFile, showFileOpen } from "@app/preload"
 import { TabulatorFull as Tabulator, type ColumnDefinition, type ColumnLookup } from 'tabulator-tables';
 import type { ForeignKey, TablewData } from "../../../types/CLDFSpec"
-import { contextMenu } from "./components";
+import { contextMenu, showHideNeighbour } from "./components";
 
 export async function tableClick(e: MouseEvent): Promise<void> {
     const target = e.target as HTMLDivElement
     const tableName: string = target.id
     showTable(tableName,{})
 }
+
+export var fullTable: TablewData
 
 let grid: Tabulator
 
@@ -25,12 +27,20 @@ export async function showTable(tableName: string, opts: showTableOptions): Prom
     if (tableWrapper) {
         tableWrapper.innerHTML = ""
 
-        const fullTable: TablewData = await getTable(tableName)
+        fullTable = await getTable(tableName)
+
+
+        let foreignKeys: ForeignKey[] | undefined = fullTable.metadata.tableSchema.foreignKeys
 
         const columns = []
         for (let col of fullTable.metadata.tableSchema.columns) {
             let colDef: ColumnDefinition = {title: col.name, field: col.name, headerFilter: 'input' }
+
             columns.push(colDef)
+            if (foreignKeys && foreignKeys.filter(key => key.columnReference[0] == col.name).length > 0){
+                colDef = {title: `${col.name} key`, field: `${col.name}_ref`, headerFilter: 'input', visible: (opts.initialFilter?.field == `${col.name}_ref`)?true: false}
+                columns.push(colDef)
+            }
         }
 
         grid = new Tabulator('#table', {
@@ -46,7 +56,7 @@ export async function showTable(tableName: string, opts: showTableOptions): Prom
             }
             document.getElementById("table")?.setAttribute('referencedFKs', attrString)
         }
-        let foreignKeys: ForeignKey[] | undefined = fullTable.metadata.tableSchema.foreignKeys
+        
 
         grid.on('tableBuilt', () => {
             grid.setData(fullTable.data).then(() => {
@@ -65,16 +75,20 @@ export async function showTable(tableName: string, opts: showTableOptions): Prom
                             }
                         }
                     }
-                    linkForeignKeys(foreignKeys)
+                    
                     if (opts.initialFilter) {
                         grid.setHeaderFilterValue(opts.initialFilter.field, opts.initialFilter.value)
                     }
+                    linkForeignKeys(foreignKeys)
                 }
             })
             grid.on('pageLoaded', () => {
                 linkForeignKeys(foreignKeys)
             })
             grid.on('dataFiltered', () => {
+                linkForeignKeys(foreignKeys)
+            })
+            grid.on('renderComplete', () => {
                 linkForeignKeys(foreignKeys)
             })
 
@@ -90,6 +104,19 @@ export async function showTable(tableName: string, opts: showTableOptions): Prom
 function linkForeignKeys(foreignKeys?: ForeignKey[]) {
     if (foreignKeys) {
         for (let key of foreignKeys) {
+            let headerCell = document.querySelector(`[tabulator-field="${key.columnReference[0]}"].tabulator-col`)
+            
+            let showHideNeighbourButton = showHideNeighbour()
+
+            let keyColumn = headerCell?.nextElementSibling?.nextElementSibling as HTMLElement
+
+            if (keyColumn.style.display != 'none'){
+                showHideNeighbourButton.textContent = '<'
+            }
+
+            headerCell?.querySelector('.tabulator-header-filter')?.appendChild(showHideNeighbourButton)
+
+
             let instances = document.querySelector('.tabulator-table')?.querySelectorAll(`[tabulator-field="${key.columnReference[0]}"`) ?? document.querySelectorAll(`[tabulator-field="${key.columnReference[0]}"`)
             for (let cell of instances) {
                 cell.classList.add('foreignKey')
@@ -163,11 +190,19 @@ interface filter {
 
 export async function openChildReference(e: Event) {
     let target = e.target as HTMLElement & {coreTarget?: HTMLElement}
+    let entryElement: HTMLElement | null
+    let primaryKey: string | undefined
+    if (target.coreTarget) {
+        entryElement = target.coreTarget.closest('.tabulator-row')
+        primaryKey = entryElement?.querySelector(`[tabulator-field = "${fullTable.primaryKey}"]`)?.textContent
+    }
     let reference = target.getAttribute('itemReference')
     if (reference) {
         let tableReference = reference.split(":")[0]
         let fieldReference = reference.split(":")[1]
-        await showTable(tableReference, { initialFilter: { field: fieldReference, value: target.coreTarget?.textContent ?? '' } })
+        await showTable(tableReference, { initialFilter: { field: `${fieldReference}_ref`, value: primaryKey ?? '' } })
+        console.log({ initialFilter: { field: `${fieldReference}_ref`, value: primaryKey ?? '' } });
+        
     }
 }
 
@@ -176,4 +211,17 @@ export function openRecentFile(e:Event){
     let path = target.getAttribute('fullPath') ?? ""
     sendOpenRecentFile(path)
 
+}
+
+export function showColumn(e:Event){
+    const target = e.target as HTMLElement
+    const col = target.closest('.tabulator-col')
+    let thisColumn:string | null
+    if (col) {
+        thisColumn = col?.getAttribute('tabulator-field')
+        grid.toggleColumn(`${thisColumn}_ref`)
+    }
+    target.textContent = target.textContent == ">" ? "<" : ">"
+    
+    
 }
