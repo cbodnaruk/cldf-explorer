@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@npmcli/map-workspaces": "4.0.2",
-    "@playwright/test": "1.54.2",
+    "@playwright/test": "1.55.0",
     "@types/node": "24.3.0",
     "@types/tabulator-tables": "^6.2.10",
     "create-vite": "7.1.1",
