@@ -3,6 +3,9 @@
 name: Entry CI
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - dev/alpha
   pull_request:
     branches:
       - release
@@ -45,6 +48,7 @@ jobs:
           echo "- \`COMMIT_TIMESTAMP\`: ${{ steps.COMMIT_TIMESTAMP.outputs.COMMIT_TIMESTAMP }}" >> $GITHUB_STEP_SUMMARY
           echo "- \`APP_VERSION\`: ${{ steps.APP_VERSION.outputs.APP_VERSION }}" >> $GITHUB_STEP_SUMMARY
           echo "- \`APP_FULL_VERSION\`: ${{ steps.APP_FULL_VERSION.outputs.APP_FULL_VERSION }}" >> $GITHUB_STEP_SUMMARY
+      - run: echo ${{github.base_ref}}
 
   compile-and-test:
     needs:
@@ -60,7 +64,7 @@ jobs:
       distribution-channel: ${{vars.DIST_CHANNEL}}
 
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: github.base_ref == 'release'
     permissions:
       contents: write
     needs:
