@@ -6,6 +6,7 @@ on:
   pull_request:
     branches:
       - release
+      - main
     paths-ignore:
       - '**.md'
       - .editorconfig
@@ -59,7 +60,7 @@ jobs:
       distribution-channel: ${{vars.DIST_CHANNEL}}
 
   deploy:
-    if: github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/release'
     permissions:
       contents: write
     needs:
