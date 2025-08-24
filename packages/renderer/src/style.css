@@ -59,18 +59,20 @@ main{
 }
 
 .foreignKey{
-  border: var(--primary-accent) solid 1px !important;
   cursor: pointer;
-  padding: 3px;
-  border-radius: 3px;
+  text-decoration: underline;
 }
 
+
 .foreignKey:hover{
-  border-color: var(--primary-accent-darker);
+  color: var(--primary-accent);
+  transition: color 0.1s ease-in-out;
 }
 
 .foreignKey:active{
-  border-color: var(--primary-accent-darkest);
+  color: var(--primary-accent-darker);
+  transition: color 0s ease-in-out;
+
 }
 
 .welcomeScreen{
@@ -195,4 +197,28 @@ main{
   border: 1px black solid;
 }
 
+.showNeighbourButton{
+  padding: 0;
+  border: none;
+  background-color: var(--primary-light);
+  cursor:pointer;
+  margin-left: 1px;
+  padding-left: 2px;
+  border-left: 1px solid var(--primary-accent);
+  border-top: 1px solid var(--primary-accent);
+  border-bottom: 1px solid var(--primary-accent);
+  color: var(--primary-accent);
+  border-radius: 2px;
+}
 
+.showNeighbourButton:hover{
+  color: var(--primary-accent-darker);
+  border-color: var(--primary-accent-darker);
+  transition: color 0.2s ease-in-out;
+}
+
+.showNeighbourButton:active{
+  color: var(--primary-accent-darkest);
+  border-color: var(--primary-accent-darkest);
+  transition: color 0s ease-in-out;
+}

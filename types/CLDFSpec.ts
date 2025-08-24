@@ -25,6 +25,7 @@ export interface TablewData {
     metadata:Table
     data:Datum[]
     referencedFKs?: FKReference[]
+    primaryKey:string
 }
 
 export interface Datum {
