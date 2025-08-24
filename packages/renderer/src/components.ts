@@ -1,5 +1,5 @@
 import { getRecentFiles } from "@app/preload"
-import { filterByValue, openChildReference, openFile, openRecentFile, openReference, tableClick } from "./behaviours"
+import { filterByValue, openChildReference, openFile, openRecentFile, openReference, showColumn, tableClick } from "./behaviours"
 
 export function tableListBoxItem(tableName:string):HTMLElement{
     const item: HTMLElement = document.createElement('div')
@@ -124,4 +124,15 @@ export async function showRecentFiles(){
   recentBox.append(recentListHeading,recentList)
   document.querySelector('.welcomeScreen')?.appendChild(recentBox)
 
+}
+
+export function showHideNeighbour():HTMLElement{
+    const button = document.createElement('button')
+    button.textContent = ">"
+    button.classList.add('showNeighbourButton')
+    button.addEventListener('click',(e)=>{
+        e.stopPropagation()
+        showColumn(e)
+    })
+    return button
 }
