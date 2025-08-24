@@ -64,7 +64,7 @@ jobs:
       distribution-channel: ${{vars.DIST_CHANNEL}}
 
   deploy:
-    if: github.base_ref == 'refs/heads/release'
+    if: github.base_ref == 'release'
     permissions:
       contents: write
     needs:
