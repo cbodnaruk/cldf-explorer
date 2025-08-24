@@ -194,7 +194,8 @@ export async function openChildReference(e: Event) {
     let primaryKey: string | undefined
     if (target.coreTarget) {
         entryElement = target.coreTarget.closest('.tabulator-row')
-        primaryKey = entryElement?.querySelector(`[tabulator-field = "${fullTable.primaryKey}"]`)?.textContent
+        primaryKey = entryElement?.querySelector(`[tabulator-field = "${fullTable.primaryKey}"]`)?.textContent ?? undefined
+
     }
     let reference = target.getAttribute('itemReference')
     if (reference) {
